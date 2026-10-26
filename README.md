@@ -27,7 +27,7 @@ push / pull request sur master
 ```
 
 1. **Tests** : installation de Python 3.12 et des dépendances, puis `pytest`.
-2. **Docker** : ne s'exécute que si les tests passent. Connexion à Docker Hub, construction de l'image `flaskapp:latest`, puis publication.
+2. **Docker** : ne s'exécute que si les tests passent, et seulement pour un push sur `master` (pas pour une pull request). Connexion à Docker Hub, puis construction et publication de l'image avec deux tags : `latest` et le SHA du commit, pour pouvoir revenir à une version précise.
 
 Les identifiants Docker Hub sont stockés dans les **secrets du dépôt** (`DOCKER_USERNAME`, `DOCKER_PASSWORD`), jamais dans le code.
 
