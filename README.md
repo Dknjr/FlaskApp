@@ -37,8 +37,8 @@ Les identifiants Docker Hub sont stockés dans les **secrets du dépôt** (`DOCK
 |---|---|
 | `app.py` | Application Flask : routes `/` et `/health` (santé du service) |
 | `test_app.py` | Test unitaire de la route |
-| `requirements.txt` | Dépendances (Flask, pytest) |
-| `Dockerfile` | Image basée sur `python:3.12-slim`, port 5000 |
+| `requirements.txt` | Dépendances (Flask, Gunicorn, pytest) |
+| `Dockerfile` | Image basée sur `python:3.12-slim`, servie par Gunicorn sur le port 5000 |
 | `.github/workflows/ci.yml` | Le pipeline CI/CD |
 
 ## Lancer en local
@@ -46,7 +46,13 @@ Les identifiants Docker Hub sont stockés dans les **secrets du dépôt** (`DOCK
 ```bash
 pip install -r requirements.txt
 pytest -q
-python app.py                   # http://localhost:5000
+python app.py                   # serveur de développement : http://localhost:5000
+```
+
+Comme en production (c'est ce que fait l'image Docker) :
+
+```bash
+gunicorn --bind 0.0.0.0:5000 --workers 2 app:app
 ```
 
 Avec Docker :

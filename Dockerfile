@@ -21,5 +21,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 # 6. Exposer le port utilisé par Flask
 EXPOSE 5000
 
-# 7. Commande pour lancer l'application Flask
-CMD ["python", "app.py"]
+# 7. Lancement avec Gunicorn, un serveur WSGI fait pour la production
+#    (le serveur intégré de Flask, « python app.py », ne sert qu'au développement)
+#    2 workers suffisent pour une petite app ; à ajuster selon le nombre de CPU
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--access-logfile", "-", "app:app"]
