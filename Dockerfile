@@ -13,6 +13,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 5. Copie des fichiers du projet dans le conteneur
 COPY . .
 
+# Vérifie toutes les 30 s que l'application répond sur /health
+# (python:3.12-slim n'a pas curl, on utilise donc la bibliothèque standard de Python)
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=2)" || exit 1
+
 # 6. Exposer le port utilisé par Flask
 EXPOSE 5000
 

@@ -35,7 +35,7 @@ Les identifiants Docker Hub sont stockés dans les **secrets du dépôt** (`DOCK
 
 | Fichier | Rôle |
 |---|---|
-| `app.py` | Application Flask, une route `/` |
+| `app.py` | Application Flask : routes `/` et `/health` (santé du service) |
 | `test_app.py` | Test unitaire de la route |
 | `requirements.txt` | Dépendances (Flask, pytest) |
 | `Dockerfile` | Image basée sur `python:3.12-slim`, port 5000 |
@@ -55,6 +55,8 @@ Avec Docker :
 docker build -t flaskapp .
 docker run -p 5000:5000 flaskapp
 ```
+
+L'image contient un `HEALTHCHECK` qui interroge `/health` toutes les 30 secondes : `docker ps` affiche alors le conteneur comme `healthy`.
 
 ## Auteur
 

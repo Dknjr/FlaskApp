@@ -1,8 +1,21 @@
-import pytest 
+import pytest
+
 from app import app
- 
-def test_index(): 
-	tester = app.test_client() 
-	response = tester.get('/') 
-	assert response.status_code == 200 
-	assert b"Hello, World!" in response.data 
+
+
+@pytest.fixture
+def client():
+    app.config['TESTING'] = True
+    return app.test_client()
+
+
+def test_index(client):
+    response = client.get('/')
+    assert response.status_code == 200
+    assert b"Hello, World!" in response.data
+
+
+def test_health(client):
+    response = client.get('/health')
+    assert response.status_code == 200
+    assert response.get_json() == {'status': 'ok'}
